@@ -49,4 +49,4 @@ dice(distance, similarity) = 0.5000
 
 ### Icon
 
-![Icon](https://github.com/tamada/scv/blob/main/docs/static/images/scv.svg)
+![Icon](https://github.com/tamada/scv/blob/main/docs/static/images/scv.png)
