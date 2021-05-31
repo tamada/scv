@@ -1,8 +1,8 @@
 # :balance_scale: scv
 
 [![build](https://github.com/tamada/scv/actions/workflows/build.yml/badge.svg)](https://github.com/tamada/scv/actions/workflows/build.yml)
- [![Coverage Status](https://coveralls.io/repos/github/tamada/scv/badge.svg?branch=setup_ci)](https://coveralls.io/github/tamada/scv?branch=setup_ci)
- ![Go Report Card](https://goreportcard.com/badge/github.com/tamada/scv)](https://goreportcard.com/report/github.com/tamada/scv)
+[![Coverage Status](https://coveralls.io/repos/github/tamada/scv/badge.svg?branch=setup_ci)](https://coveralls.io/github/tamada/scv?branch=setup_ci)
+[![Go Report Card](https://goreportcard.com/badge/github.com/tamada/scv)](https://goreportcard.com/report/github.com/tamada/scv)
 [![codebeat badge](https://codebeat.co/badges/5221e6ba-da64-45c1-8b13-f833f678e3b9)](https://codebeat.co/projects/github-com-tamada-scv-main)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?logo=spdx)](https://github.com/tamada/scv/blob/main/LICENSE)
 
