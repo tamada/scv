@@ -75,6 +75,6 @@ func parseArgs(args []string) (*options, error) {
 	if err := flags.Parse(args); err != nil {
 		return nil, err
 	}
-	opts.args = flags.Args()
+	opts.args = flags.Args()[1:]
 	return validate(opts)
 }

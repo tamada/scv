@@ -28,6 +28,7 @@ VECTORS
 
 func convert(opts *options) []*vector.Vector {
 	results := []*vector.Vector{}
+	fmt.Printf("convert(%v)\n", opts.args)
 	for _, arg := range opts.args {
 		vector := vector.NewVectorFromString(arg)
 		results = append(results, vector)
@@ -42,7 +43,7 @@ func pairing(vectors []*vector.Vector) []*vector.VectorPair {
 			if vector1 == vector2 {
 				break
 			}
-			pairs = append(pairs, &vector.VectorPair{Vector1: vector1, Vector2: vector2})
+			pairs = append(pairs, &vector.VectorPair{Vector1: vector2, Vector2: vector1})
 		}
 	}
 	return pairs
