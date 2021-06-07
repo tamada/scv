@@ -10,7 +10,7 @@ func Example_help() {
 	//                                    Available values are: simpson, jaccard, dice, and cosine.
 	//     -f, --format <FORMAT>          specifies the resultant format. Default is default.
 	//                                    Available values are: default, json, and xml.
-	//     -t, --input-type <TYPE>        specifies the type of VECTORS. Default is file.
+	//     -t, --input-type <TYPE>        specifies the type of VECTORS. Default is string.
 	//                                    If TYPE is separated with comma, each type shows
 	//                                    the corresponding VECTORS.
 	//                                    Available values are: file, string, and json.
