@@ -6,12 +6,11 @@ type Source interface {
 }
 
 type stringSource struct {
-	typeValue string
-	value     string
+	value string
 }
 
 func (ss *stringSource) Type() string {
-	return ss.typeValue
+	return "string"
 }
 
 func (ss *stringSource) Value() string {
@@ -19,5 +18,5 @@ func (ss *stringSource) Value() string {
 }
 
 func newStringSource(str string) Source {
-	return &stringSource{typeValue: "string", value: str}
+	return &stringSource{value: str}
 }

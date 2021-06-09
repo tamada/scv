@@ -2,38 +2,40 @@ package vector
 
 import (
 	"fmt"
+	"math"
 	"strings"
 )
 
 type Algorithm interface {
-	Compare(v1, v2 *Vector) float32
+	Compare(v1, v2 *Vector) float64
 }
 
 type simpsonComparator struct {
 }
 
-func (sc *simpsonComparator) Compare(v1, v2 *Vector) float32 {
+func (sc *simpsonComparator) Compare(v1, v2 *Vector) float64 {
 	return 1.0
 }
 
 type diceComparator struct {
 }
 
-func (dc *diceComparator) Compare(v1, v2 *Vector) float32 {
+func (dc *diceComparator) Compare(v1, v2 *Vector) float64 {
 	return 1.0
 }
 
 type jaccardComparator struct {
 }
 
-func (jc *jaccardComparator) Compare(v1, v2 *Vector) float32 {
-	return 1.0
+func (jc *jaccardComparator) Compare(v1, v2 *Vector) float64 {
+	vp := NewVectorPair(v1, v2)
+	return vp.Union().Length() / math.Min(v1.Length(), v2.Length())
 }
 
 type cosineComparator struct {
 }
 
-func (sc *cosineComparator) Compare(v1, v2 *Vector) float32 {
+func (sc *cosineComparator) Compare(v1, v2 *Vector) float64 {
 	return 1.0
 }
 

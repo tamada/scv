@@ -50,7 +50,7 @@ func pairing(vectors []*vector.Vector) []*vector.VectorPair {
 }
 
 type result struct {
-	similarity float32
+	similarity float64
 	err        error
 }
 
