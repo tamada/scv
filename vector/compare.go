@@ -110,6 +110,28 @@ func abs(value int) int {
 	return value
 }
 
+func max(v1, v2 int) int {
+	if v1 > v2 {
+		return v1
+	}
+	return v2
+}
+
+type chebyshevDistance struct {
+}
+
+func (cd *chebyshevDistance) Compare(v1, v2 *Vector) float64 {
+	union := v1.Union(v2)
+	result := -1
+	for key := range union.values {
+		value1 := v1.values[key]
+		value2 := v2.values[key]
+		distance := abs(value1 - value2)
+		result = max(distance, result)
+	}
+	return float64(result)
+}
+
 func NewAlgorithm(comparatorType string) (Algorithm, error) {
 	switch strings.ToLower(comparatorType) {
 	case "simpson":
@@ -126,6 +148,8 @@ func NewAlgorithm(comparatorType string) (Algorithm, error) {
 		return &euclideanDistance{}, nil
 	case "manhattan":
 		return &manhattanDistance{}, nil
+	case "chebyshev":
+		return &chebyshevDistance{}, nil
 	}
 	return nil, fmt.Errorf("%s: unknown algorithm", comparatorType)
 }

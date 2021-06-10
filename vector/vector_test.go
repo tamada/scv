@@ -92,3 +92,10 @@ func TestManhattanDistance(t *testing.T) {
 		{"android", "ipodtouch", 10.0},
 	}, "manhattan")
 }
+
+func TestChebyshevDistance(t *testing.T) {
+	execTest(t, []TestData{
+		{"distance", "similarity", 2.0},
+		{"android", "ipodtouch", 1.0},
+	}, "chebyshev")
+}
