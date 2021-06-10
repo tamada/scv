@@ -23,7 +23,9 @@ type diceComparator struct {
 }
 
 func (dc *diceComparator) Compare(v1, v2 *Vector) float64 {
-	return 1.0
+	vp := NewVectorPair(v1, v2)
+	intersect := vp.Intersect()
+	return 2.0 * intersect.Length() / (v1.Length() + v2.Length())
 }
 
 type jaccardComparator struct {
