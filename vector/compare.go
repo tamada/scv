@@ -96,7 +96,10 @@ func (ld *levenshteinDistance) Compare(v1, v2 *Vector) (float64, error) {
 	if v1.Source.Type() != "string" || v2.Source.Type() != "string" {
 		return 0, fmt.Errorf("levenshtein distance: type of two vector must be string")
 	}
-	s1, s2 := v1.Source.Value(), v2.Source.Value()
+	return ld.compareImpl(v1.Source.Value(), v2.Source.Value())
+}
+
+func (ld *levenshteinDistance) compareImpl(s1, s2 string) (float64, error) {
 	table := constructTable(s1, s2)
 	calcLevenshtein(table, s1, s2)
 	return float64(table[len(s1)][len(s2)]), nil
@@ -105,16 +108,20 @@ func (ld *levenshteinDistance) Compare(v1, v2 *Vector) (float64, error) {
 func calcLevenshtein(table [][]int, s1, s2 string) {
 	for i := 1; i < len(table); i++ {
 		for j := 1; j < len(table[i]); j++ {
-			cost := 1
-			if s1[i-1] == s2[j-1] {
-				cost = 0
-			}
-			d1 := table[i-1][j] + 1
-			d2 := table[i][j-1] + 1
-			d3 := table[i-1][j-1] + cost
-			table[i][j] = min(d1, d2, d3)
+			updateTable(table, i, j, s1[i-1] == s2[j-1])
 		}
 	}
+}
+
+func updateTable(table [][]int, i, j int, equalsFlag bool) {
+	cost := 1
+	if equalsFlag {
+		cost = 0
+	}
+	d1 := table[i-1][j] + 1
+	d2 := table[i][j-1] + 1
+	d3 := table[i-1][j-1] + cost
+	table[i][j] = min(d1, d2, d3)
 }
 
 func constructTable(s1, s2 string) [][]int {
