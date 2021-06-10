@@ -7,39 +7,39 @@ import (
 )
 
 type Algorithm interface {
-	Compare(v1, v2 *Vector) float64
+	Compare(v1, v2 *Vector) (float64, error)
 }
 
 type simpsonComparator struct {
 }
 
-func (sc *simpsonComparator) Compare(v1, v2 *Vector) float64 {
+func (sc *simpsonComparator) Compare(v1, v2 *Vector) (float64, error) {
 	intersect := v1.Intersect(v2)
-	return intersect.Length() / math.Min(v1.Length(), v2.Length())
+	return intersect.Length() / math.Min(v1.Length(), v2.Length()), nil
 }
 
 type diceComparator struct {
 }
 
-func (dc *diceComparator) Compare(v1, v2 *Vector) float64 {
+func (dc *diceComparator) Compare(v1, v2 *Vector) (float64, error) {
 	intersect := v1.Intersect(v2)
-	return 2.0 * intersect.Length() / (v1.Length() + v2.Length())
+	return 2.0 * intersect.Length() / (v1.Length() + v2.Length()), nil
 }
 
 type jaccardComparator struct {
 }
 
-func (jc *jaccardComparator) Compare(v1, v2 *Vector) float64 {
+func (jc *jaccardComparator) Compare(v1, v2 *Vector) (float64, error) {
 	intersect := v1.Intersect(v2)
 	union := v1.Union(v2)
-	return intersect.Length() / union.Length()
+	return intersect.Length() / union.Length(), nil
 }
 
 type cosineComparator struct {
 }
 
-func (sc *cosineComparator) Compare(v1, v2 *Vector) float64 {
-	return v1.InnerProduct(v2)
+func (sc *cosineComparator) Compare(v1, v2 *Vector) (float64, error) {
+	return v1.InnerProduct(v2), nil
 }
 
 type pearsonCorrelation struct {
@@ -67,18 +67,18 @@ func calcCovariance(v1, v2, union *Vector) float64 {
 	return covariance
 }
 
-func (pc *pearsonCorrelation) Compare(v1, v2 *Vector) float64 {
+func (pc *pearsonCorrelation) Compare(v1, v2 *Vector) (float64, error) {
 	union := v1.Union(v2)
 	covariance := calcCovariance(v1, v2, union)
 	deviation1 := calcDeviation(v1, union)
 	deviation2 := calcDeviation(v2, union)
-	return covariance / (deviation1 * deviation2)
+	return covariance / (deviation1 * deviation2), nil
 }
 
 type euclideanDistance struct {
 }
 
-func (ed *euclideanDistance) Compare(v1, v2 *Vector) float64 {
+func (ed *euclideanDistance) Compare(v1, v2 *Vector) (float64, error) {
 	union := v1.Union(v2)
 	sum := 0
 	for key := range union.values {
@@ -86,51 +86,86 @@ func (ed *euclideanDistance) Compare(v1, v2 *Vector) float64 {
 		value2 := v2.values[key]
 		sum = sum + ((value1 - value2) * (value1 - value2))
 	}
-	return math.Sqrt(float64(sum))
+	return math.Sqrt(float64(sum)), nil
 }
 
-type manhattanDistance struct {
+type levenshteinDistance struct {
 }
 
-func (md *manhattanDistance) Compare(v1, v2 *Vector) float64 {
-	union := v1.Union(v2)
-	sum := 0
-	for key := range union.values {
-		value1 := v1.values[key]
-		value2 := v2.values[key]
-		sum = sum + abs(value1-value2)
+func (ld *levenshteinDistance) Compare(v1, v2 *Vector) (float64, error) {
+	if v1.Source.Type() != "string" || v2.Source.Type() != "string" {
+		return 0, fmt.Errorf("levenshtein distance: type of two vector must be string")
 	}
-	return float64(sum)
+	return ld.compareImpl(v1.Source.Value(), v2.Source.Value())
 }
 
-func abs(value int) int {
-	if value < 0 {
-		return value * -1
+func (ld *levenshteinDistance) compareImpl(s1, s2 string) (float64, error) {
+	table := constructTable(s1, s2)
+	calcLevenshtein(table, s1, s2)
+	return float64(table[len(s1)][len(s2)]), nil
+}
+
+func calcLevenshtein(table [][]int, s1, s2 string) {
+	for i := 1; i < len(table); i++ {
+		for j := 1; j < len(table[i]); j++ {
+			cost := 1
+			if s1[i-1] == s2[j-1] {
+				cost = 0
+			}
+			updateTable(table, i, j, cost)
+		}
 	}
-	return value
 }
 
-func max(v1, v2 int) int {
-	if v1 > v2 {
-		return v1
+func updateTable(table [][]int, i, j, cost int) {
+	d1 := table[i-1][j] + 1
+	d2 := table[i][j-1] + 1
+	d3 := table[i-1][j-1] + cost
+	table[i][j] = min(d1, d2, d3)
+}
+
+func constructTable(s1, s2 string) [][]int {
+	table := [][]int{}
+	for j := 0; j <= len(s1); j++ {
+		values := []int{}
+		for i := 0; i <= len(s2); i++ {
+			values = append(values, 0)
+		}
+		table = append(table, values)
 	}
-	return v2
+	return initTable(table)
 }
 
-type chebyshevDistance struct {
-}
-
-func (cd *chebyshevDistance) Compare(v1, v2 *Vector) float64 {
-	union := v1.Union(v2)
-	result := -1
-	for key := range union.values {
-		value1 := v1.values[key]
-		value2 := v2.values[key]
-		distance := abs(value1 - value2)
-		result = max(distance, result)
+func initTable(table [][]int) [][]int {
+	for i := 0; i < len(table); i++ {
+		table[i][0] = i
 	}
-	return float64(result)
+	for j := 0; j < len(table[0]); j++ {
+		table[0][j] = j
+	}
+	return table
 }
+
+func min(values ...int) int {
+	min := values[0]
+	for _, value := range values {
+		if min > value {
+			min = value
+		}
+	}
+	return min
+}
+
+/*
+func printTable(table [][]int) {
+	for i := 0; i < len(table); i++ {
+		for j := 0; j < len(table[i]); j++ {
+			fmt.Printf("%2d ", table[i][j])
+		}
+		fmt.Println()
+	}
+}
+*/
 
 func NewAlgorithm(comparatorType string) (Algorithm, error) {
 	switch strings.ToLower(comparatorType) {
@@ -146,10 +181,8 @@ func NewAlgorithm(comparatorType string) (Algorithm, error) {
 		return &pearsonCorrelation{}, nil
 	case "euclidean":
 		return &euclideanDistance{}, nil
-	case "manhattan":
-		return &manhattanDistance{}, nil
-	case "chebyshev":
-		return &chebyshevDistance{}, nil
+	case "levenshtein":
+		return &levenshteinDistance{}, nil
 	}
 	return nil, fmt.Errorf("%s: unknown algorithm", comparatorType)
 }

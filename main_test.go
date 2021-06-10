@@ -17,7 +17,7 @@ func Example_help() {
 	//     -a, --algorithm <ALGORITHM>    specifies the calculating algorithm.  This option is mandatory.
 	//                                    The value of this option accepts several values separated with comma.
 	//                                    Available values are: simpson, jaccard, dice, cosine, pearson,
-	//                                    euclidean, manhattan, and chebyshev.
+	//                                    euclidean, manhattan, chebyshev, and levenshtein.
 	//     -f, --format <FORMAT>          specifies the resultant format. Default is default.
 	//                                    Available values are: default, json, and xml.
 	//     -t, --input-type <TYPE>        specifies the type of VECTORS. Default is string.
@@ -37,8 +37,11 @@ func TestParseArgs(t *testing.T) {
 		{[]string{"scv", "--invalid-option", "a1", "a2"}, 1},
 		{[]string{"scv"}, 1}, // required parameters missing
 		{[]string{"scv", "--algorithm", "unknown_algorithm", "a1", "a2"}, 1},
-		{[]string{"scv", "--format", "unknown_format", "a1", "a2"}, 1},
-		{[]string{"scv", "--input-type", "unknown_type", "a1", "a2"}, 1},
+		{[]string{"scv", "--algorithm", "simpson", "--format", "unknown_format", "a1", "a2"}, 1},
+		{[]string{"scv", "--algorithm", "simpson", "--input-type", "unknown_type", "a1", "a2"}, 1},
+		{[]string{"scv", "--algorithm", "simpson", "--input-type", "string", "a1", "a2"}, 0},
+		{[]string{"scv", "--algorithm", "simpson", "--input-type", "string,string", "a1", "a2"}, 0},
+		{[]string{"scv", "--algorithm", "simpson", "--input-type", "string,string", "a1", "a2", "a3"}, 1},
 	}
 	for _, td := range testdata {
 		gotStatus := goMain(td.giveArgs)

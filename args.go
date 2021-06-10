@@ -25,11 +25,10 @@ func isIn(originalValue string, set []string) error {
 	return fmt.Errorf("%s: unavailable value, availables: %v", originalValue, set)
 }
 
-func validateAlgorithm(algorithm string) error {
-	values := strings.Split(algorithm, ",")
-	set := []string{"simpson", "jaccard", "dice", "cosine", "pearson", "euclidean", "manhattan", "chebyshev"}
-	for _, value := range values {
-		err := isIn(value, set)
+func validateMultipleValues(values string, availableSet []string) error {
+	splittedValues := strings.Split(values, ",")
+	for _, value := range splittedValues {
+		err := isIn(value, availableSet)
 		if err != nil {
 			return err
 		}
@@ -37,29 +36,34 @@ func validateAlgorithm(algorithm string) error {
 	return nil
 }
 
-func validateInputType(inputType string) error {
-	return isIn(inputType, []string{"default", "string", "file", "json"})
+func validateAlgorithm(algorithms string) error {
+	set := []string{"simpson", "jaccard", "dice", "cosine", "pearson", "euclidean", "manhattan", "chebyshev", "levenshtein"}
+	return validateMultipleValues(algorithms, set)
+}
+
+func validateInputType(inputTypes string) error {
+	return validateMultipleValues(inputTypes, []string{"string", "file", "json"})
 }
 
 func validateFormat(format string) error {
 	return isIn(format, []string{"default", "json", "xml"})
 }
 
-func validateEachOpt(opts *options) (*options, error) {
+func validateEachOpt(opts *options) error {
 	data := []struct {
 		value     string
 		validator func(value string) error
 	}{
-		{opts.algorithm, validateAlgorithm},
 		{opts.inputType, validateInputType},
 		{opts.format, validateFormat},
+		{opts.algorithm, validateAlgorithm},
 	}
 	for _, datum := range data {
 		if err := datum.validator(datum.value); err != nil {
-			return nil, err
+			return err
 		}
 	}
-	return opts, nil
+	return nil
 }
 
 func validate(opts *options) (*options, error) {
@@ -69,7 +73,14 @@ func validate(opts *options) (*options, error) {
 	if len(opts.args) <= 1 {
 		return nil, fmt.Errorf("two arguments are required at the least")
 	}
-	return validateEachOpt(opts)
+	if err := validateEachOpt(opts); err != nil {
+		return nil, err
+	}
+	types := strings.Split(opts.inputType, ",")
+	if len(types) != 1 && (len(types) != len(opts.args)) {
+		return nil, fmt.Errorf("%s: input type must be one or same length with args (%d != %d)", opts.inputType, len(types), len(opts.args))
+	}
+	return opts, nil
 }
 
 func parseArgs(args []string) (*options, error) {

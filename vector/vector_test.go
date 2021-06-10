@@ -37,7 +37,7 @@ func execTest(t *testing.T, data []TestData, algorithmName string) {
 		v1 := NewVectorFromString(datum.giveString1)
 		v2 := NewVectorFromString(datum.giveString2)
 		algorithm, _ := NewAlgorithm(algorithmName)
-		gotSimilarity := algorithm.Compare(v1, v2)
+		gotSimilarity, _ := algorithm.Compare(v1, v2)
 		if math.Abs(gotSimilarity-datum.wontSimilarity) > threshold {
 			t.Errorf("%s(%s, %s) did not match, wont %f, got %f", algorithmName, datum.giveString1, datum.giveString2, datum.wontSimilarity, gotSimilarity)
 		}
@@ -86,16 +86,9 @@ func TestEuclideanDistance(t *testing.T) {
 	}, "euclidean")
 }
 
-func TestManhattanDistance(t *testing.T) {
+func TestLevenshteinDistance(t *testing.T) {
 	execTest(t, []TestData{
-		{"distance", "similarity", 10.0},
-		{"android", "ipodtouch", 10.0},
-	}, "manhattan")
-}
-
-func TestChebyshevDistance(t *testing.T) {
-	execTest(t, []TestData{
-		{"distance", "similarity", 2.0},
-		{"android", "ipodtouch", 1.0},
-	}, "chebyshev")
+		{"distance", "similarity", 8.0},
+		{"android", "ipodtouch", 7.0},
+	}, "levenshtein")
 }
