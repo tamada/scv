@@ -89,6 +89,27 @@ func (ed *euclideanDistance) Compare(v1, v2 *Vector) float64 {
 	return math.Sqrt(float64(sum))
 }
 
+type manhattanDistance struct {
+}
+
+func (md *manhattanDistance) Compare(v1, v2 *Vector) float64 {
+	union := v1.Union(v2)
+	sum := 0
+	for key := range union.values {
+		value1 := v1.values[key]
+		value2 := v2.values[key]
+		sum = sum + abs(value1-value2)
+	}
+	return float64(sum)
+}
+
+func abs(value int) int {
+	if value < 0 {
+		return value * -1
+	}
+	return value
+}
+
 func NewAlgorithm(comparatorType string) (Algorithm, error) {
 	switch strings.ToLower(comparatorType) {
 	case "simpson":
@@ -103,6 +124,8 @@ func NewAlgorithm(comparatorType string) (Algorithm, error) {
 		return &pearsonCorrelation{}, nil
 	case "euclidean":
 		return &euclideanDistance{}, nil
+	case "manhattan":
+		return &manhattanDistance{}, nil
 	}
 	return nil, fmt.Errorf("%s: unknown algorithm", comparatorType)
 }
