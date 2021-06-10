@@ -46,6 +46,40 @@ func (sc *cosineComparator) Compare(v1, v2 *Vector) float64 {
 	return vp.InnerProduct()
 }
 
+type pearsonCorrelation struct {
+}
+
+func calcDeviation(v, union *Vector) float64 {
+	sum := float64(0)
+	average := v.average(union.Length())
+	for key, _ := range union.values {
+		value := float64(v.values[key]) - average
+		sum = sum + (value * value)
+	}
+	return math.Sqrt(sum)
+}
+
+func calcCovariance(v1, v2, union *Vector) float64 {
+	covariance := float64(0)
+	xAverage := v1.average(union.Length())
+	yAverage := v2.average(union.Length())
+	for key, _ := range union.values {
+		x := float64(v1.values[key])
+		y := float64(v2.values[key])
+		covariance = covariance + ((x - xAverage) * (y - yAverage))
+	}
+	return covariance
+}
+
+func (pc *pearsonCorrelation) Compare(v1, v2 *Vector) float64 {
+	vp := NewVectorPair(v1, v2)
+	union := vp.Union()
+	covariance := calcCovariance(v1, v2, union)
+	deviation1 := calcDeviation(v1, union)
+	deviation2 := calcDeviation(v2, union)
+	return covariance / (deviation1 * deviation2)
+}
+
 func NewAlgorithm(comparatorType string) (Algorithm, error) {
 	switch strings.ToLower(comparatorType) {
 	case "simpson":
@@ -56,6 +90,8 @@ func NewAlgorithm(comparatorType string) (Algorithm, error) {
 		return &jaccardComparator{}, nil
 	case "cosine":
 		return &cosineComparator{}, nil
+	case "pearson":
+		return &pearsonCorrelation{}, nil
 	}
 	return nil, fmt.Errorf("%s: unknown algorithm", comparatorType)
 }

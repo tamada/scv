@@ -25,86 +25,56 @@ func TestConstructVector(t *testing.T) {
 	}
 }
 
-func TestJaccardIndex(t *testing.T) {
-	testdata := []struct {
-		giveString1    string
-		giveString2    string
-		wontSimilarity float64
-	}{
-		{"distance", "similarity", 0.3333333},
-		{"android", "ipodtouch", 0.272727},
-	}
+type TestData struct {
+	giveString1    string
+	giveString2    string
+	wontSimilarity float64
+}
+
+func execTest(t *testing.T, data []TestData, algorithmName string) {
 	var threshold float64 = 1e-6
-	for _, td := range testdata {
-		vector1 := NewVectorFromString(td.giveString1)
-		vector2 := NewVectorFromString(td.giveString2)
-		algorithm, _ := NewAlgorithm("jaccard")
-		result := algorithm.Compare(vector1, vector2)
-		if math.Abs(result-td.wontSimilarity) > threshold {
-			t.Errorf("jaccard(%s, %s) did not match, wont %f, got %f", td.giveString1, td.giveString2, td.wontSimilarity, result)
+	for _, datum := range data {
+		v1 := NewVectorFromString(datum.giveString1)
+		v2 := NewVectorFromString(datum.giveString2)
+		algorithm, _ := NewAlgorithm(algorithmName)
+		gotSimilarity := algorithm.Compare(v1, v2)
+		if math.Abs(gotSimilarity-datum.wontSimilarity) > threshold {
+			t.Errorf("%s(%s, %s) did not match, wont %f, got %f", algorithmName, datum.giveString1, datum.giveString2, datum.wontSimilarity, gotSimilarity)
 		}
 	}
+}
+
+func TestJaccardIndex(t *testing.T) {
+	execTest(t, []TestData{
+		{"distance", "similarity", 0.3333333},
+		{"android", "ipodtouch", 0.272727},
+	}, "jaccard")
 }
 
 func TestSimpsonIndex(t *testing.T) {
-	testdata := []struct {
-		giveString1    string
-		giveString2    string
-		wontSimilarity float64
-	}{
+	execTest(t, []TestData{
 		{"distance", "similarity", 0.500000},
 		{"android", "ipodtouch", 0.500000},
-	}
-	var threshold float64 = 1e-6
-	for _, td := range testdata {
-		vector1 := NewVectorFromString(td.giveString1)
-		vector2 := NewVectorFromString(td.giveString2)
-		algorithm, _ := NewAlgorithm("simpson")
-		result := algorithm.Compare(vector1, vector2)
-		if math.Abs(result-td.wontSimilarity) > threshold {
-			t.Errorf("jaccard(%s, %s) did not match, wont %f, got %f", td.giveString1, td.giveString2, td.wontSimilarity, result)
-		}
-	}
+	}, "simpson")
 }
 
 func TestDiceIndex(t *testing.T) {
-	testdata := []struct {
-		giveString1    string
-		giveString2    string
-		wontSimilarity float64
-	}{
+	execTest(t, []TestData{
 		{"distance", "similarity", 0.500000},
 		{"android", "ipodtouch", 0.428571},
-	}
-	var threshold float64 = 1e-6
-	for _, td := range testdata {
-		vector1 := NewVectorFromString(td.giveString1)
-		vector2 := NewVectorFromString(td.giveString2)
-		algorithm, _ := NewAlgorithm("dice")
-		result := algorithm.Compare(vector1, vector2)
-		if math.Abs(result-td.wontSimilarity) > threshold {
-			t.Errorf("jaccard(%s, %s) did not match, wont %f, got %f", td.giveString1, td.giveString2, td.wontSimilarity, result)
-		}
-	}
+	}, "dice")
 }
 
 func TestCosineSimilarity(t *testing.T) {
-	testdata := []struct {
-		giveString1    string
-		giveString2    string
-		wontSimilarity float64
-	}{
+	execTest(t, []TestData{
 		{"distance", "similarity", 0.530330},
 		{"android", "ipodtouch", 0.502519},
-	}
-	var threshold float64 = 1e-6
-	for _, td := range testdata {
-		vector1 := NewVectorFromString(td.giveString1)
-		vector2 := NewVectorFromString(td.giveString2)
-		algorithm, _ := NewAlgorithm("cosine")
-		result := algorithm.Compare(vector1, vector2)
-		if math.Abs(result-td.wontSimilarity) > threshold {
-			t.Errorf("jaccard(%s, %s) did not match, wont %f, got %f", td.giveString1, td.giveString2, td.wontSimilarity, result)
-		}
-	}
+	}, "cosine")
+}
+
+func TestPearsonCorrelation(t *testing.T) {
+	execTest(t, []TestData{
+		{"distance", "similarity", -0.147441956},
+		{"android", "ipodtouch", -0.178885438},
+	}, "pearson")
 }

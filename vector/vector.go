@@ -70,8 +70,9 @@ func (vp *VectorPair) InnerProduct() float64 {
 }
 
 type Vector struct {
-	Source Source
-	values map[string]int
+	Source       Source
+	values       map[string]int
+	averageValue float64
 }
 
 func (vector *Vector) Length() float64 {
@@ -102,6 +103,17 @@ func (vector *Vector) Get(key string) int {
 		return 0
 	}
 	return value
+}
+
+func (vector *Vector) average(n float64) float64 {
+	if vector.averageValue == 0.0 {
+		sum := 0
+		for _, value := range vector.values {
+			sum = sum + value
+		}
+		vector.averageValue = float64(sum) / n
+	}
+	return vector.averageValue
 }
 
 func (vector *Vector) Value() string {
