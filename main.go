@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/tamada/scv/vector"
 )
@@ -14,7 +15,8 @@ func helpMessage(originalProgramName string) string {
 OPTIONS
     -a, --algorithm <ALGORITHM>    specifies the calculating algorithm.  This option is mandatory.
                                    The value of this option accepts several values separated with comma.
-                                   Available values are: simpson, jaccard, dice, and cosine.
+                                   Available values are: simpson, jaccard, dice, cosine, pearson,
+                                   euclidean, manhattan, and chebyshev.
     -f, --format <FORMAT>          specifies the resultant format. Default is default.
                                    Available values are: default, json, and xml.
     -t, --input-type <TYPE>        specifies the type of VECTORS. Default is string.
@@ -28,7 +30,6 @@ VECTORS
 
 func convert(opts *options) []*vector.Vector {
 	results := []*vector.Vector{}
-	fmt.Printf("convert(%v)\n", opts.args)
 	for _, arg := range opts.args {
 		vector := vector.NewVectorFromString(arg)
 		results = append(results, vector)
@@ -50,34 +51,46 @@ func pairing(vectors []*vector.Vector) []*vector.VectorPair {
 }
 
 type result struct {
+	algorithm  string
+	pair       *vector.VectorPair
 	similarity float64
-	err        error
 }
 
-func calculate(pairs []*vector.VectorPair, algorithm vector.Algorithm) []*result {
+func calculate(pairs []*vector.VectorPair, algorithm vector.Algorithm, name string) []*result {
 	results := []*result{}
 	for _, pair := range pairs {
 		similarity := pair.Compare(algorithm)
-		results = append(results, &result{similarity: similarity, err: nil})
+		results = append(results, &result{algorithm: name, similarity: similarity, pair: pair})
 	}
 	return results
 }
 
-func printResult(algorithmName string, pair *vector.VectorPair, r *result) {
-	fmt.Printf("%s(%s, %s): %f\n", algorithmName, pair.Vector1.Source.Value(), pair.Vector2.Source.Value(), r.similarity)
+func constructPairs(opts *options) []*vector.VectorPair {
+	vectors := convert(opts)
+	return pairing(vectors)
 }
 
 func perform(opts *options) int {
-	vectors := convert(opts)
-	pairs := pairing(vectors)
-	algorithm, err := vector.NewAlgorithm(opts.algorithm)
-	if err != nil {
-		fmt.Println(err.Error())
-		return 3
+	pairs := constructPairs(opts)
+	algos := strings.Split(opts.algorithm, ",")
+	printer := NewPrinter(opts.format, os.Stdout)
+	printer.PrintHeader()
+	for i, algorithmName := range algos {
+		algorithm, err := vector.NewAlgorithm(algorithmName)
+		if err != nil {
+			fmt.Println(err.Error())
+			return 3
+		}
+		results := calculate(pairs, algorithm, algorithmName)
+		printEach(printer, results, i == 0)
 	}
-	results := calculate(pairs, algorithm)
-	for i, _ := range results {
-		printResult(opts.algorithm, pairs[i], results[i])
+	printer.PrintFooter()
+	return 0
+}
+
+func printEach(printer Printer, results []*result, first bool) int {
+	for i := range results {
+		printer.PrintEach(results[i], first && i == 0)
 	}
 	return 0
 }
