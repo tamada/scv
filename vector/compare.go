@@ -2,6 +2,7 @@ package vector
 
 import (
 	"fmt"
+	"math"
 	"strings"
 )
 
@@ -13,7 +14,9 @@ type simpsonComparator struct {
 }
 
 func (sc *simpsonComparator) Compare(v1, v2 *Vector) float64 {
-	return 1.0
+	vp := NewVectorPair(v1, v2)
+	intersect := vp.Intersect()
+	return intersect.Length() / math.Min(v1.Length(), v2.Length())
 }
 
 type diceComparator struct {
