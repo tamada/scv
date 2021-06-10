@@ -24,7 +24,7 @@ func putAll(to, from map[string]int) {
 	}
 }
 
-func (vp *VectorPair) Compare(algorithm Algorithm) float64 {
+func (vp *VectorPair) Compare(algorithm Algorithm) (float64, error) {
 	return algorithm.Compare(vp.Vector1, vp.Vector2)
 }
 

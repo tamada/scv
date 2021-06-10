@@ -16,7 +16,7 @@ OPTIONS
     -a, --algorithm <ALGORITHM>    specifies the calculating algorithm.  This option is mandatory.
                                    The value of this option accepts several values separated with comma.
                                    Available values are: simpson, jaccard, dice, cosine, pearson,
-                                   euclidean, manhattan, and chebyshev.
+                                   euclidean, manhattan, chebyshev, and levenshtein.
     -f, --format <FORMAT>          specifies the resultant format. Default is default.
                                    Available values are: default, json, and xml.
     -t, --input-type <TYPE>        specifies the type of VECTORS. Default is string.
@@ -54,13 +54,14 @@ type result struct {
 	algorithm  string
 	pair       *vector.VectorPair
 	similarity float64
+	err        error
 }
 
 func calculate(pairs []*vector.VectorPair, algorithm vector.Algorithm, name string) []*result {
 	results := []*result{}
 	for _, pair := range pairs {
-		similarity := pair.Compare(algorithm)
-		results = append(results, &result{algorithm: name, similarity: similarity, pair: pair})
+		similarity, err := pair.Compare(algorithm)
+		results = append(results, &result{algorithm: name, similarity: similarity, pair: pair, err: err})
 	}
 	return results
 }
