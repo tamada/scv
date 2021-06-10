@@ -1,6 +1,9 @@
 package vector
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 
 type VectorPair struct {
 	Vector1 *Vector
@@ -56,6 +59,16 @@ func (vp *VectorPair) Intersect() *Vector {
 	return &Vector{Source: vp, values: result}
 }
 
+func (vp *VectorPair) InnerProduct() float64 {
+	sum := 0
+	for key, _ := range vp.values {
+		v1 := vp.Vector1.values[key]
+		v2 := vp.Vector2.values[key]
+		sum = sum + (v1 * v2)
+	}
+	return float64(sum) / (vp.Vector1.Norm() * vp.Vector2.Norm())
+}
+
 type Vector struct {
 	Source Source
 	values map[string]int
@@ -63,6 +76,14 @@ type Vector struct {
 
 func (vector *Vector) Length() float64 {
 	return float64(len(vector.values))
+}
+
+func (vector *Vector) Norm() float64 {
+	sum := 0
+	for _, value := range vector.values {
+		sum = sum + value*value
+	}
+	return math.Sqrt(float64(sum))
 }
 
 func (vector *Vector) Put(key string) (postFrequency int) {

@@ -87,3 +87,24 @@ func TestDiceIndex(t *testing.T) {
 		}
 	}
 }
+
+func TestCosineSimilarity(t *testing.T) {
+	testdata := []struct {
+		giveString1    string
+		giveString2    string
+		wontSimilarity float64
+	}{
+		{"distance", "similarity", 0.530330},
+		{"android", "ipodtouch", 0.502519},
+	}
+	var threshold float64 = 1e-6
+	for _, td := range testdata {
+		vector1 := NewVectorFromString(td.giveString1)
+		vector2 := NewVectorFromString(td.giveString2)
+		algorithm, _ := NewAlgorithm("cosine")
+		result := algorithm.Compare(vector1, vector2)
+		if math.Abs(result-td.wontSimilarity) > threshold {
+			t.Errorf("jaccard(%s, %s) did not match, wont %f, got %f", td.giveString1, td.giveString2, td.wontSimilarity, result)
+		}
+	}
+}

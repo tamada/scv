@@ -42,7 +42,8 @@ type cosineComparator struct {
 }
 
 func (sc *cosineComparator) Compare(v1, v2 *Vector) float64 {
-	return 1.0
+	vp := NewVectorPair(v1, v2)
+	return vp.InnerProduct()
 }
 
 func NewAlgorithm(comparatorType string) (Algorithm, error) {
