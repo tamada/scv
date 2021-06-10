@@ -4,13 +4,11 @@ import (
 	"fmt"
 	"io"
 	"strings"
-
-	"github.com/tamada/scv/vector"
 )
 
 type Printer interface {
 	PrintHeader()
-	PrintEach(algorithmName string, v1, v2 *vector.Vector, result *result, first bool)
+	PrintEach(r *result, first bool)
 	PrintFooter()
 }
 
@@ -32,9 +30,9 @@ func (xp *xmlPrinter) PrintHeader() {
 	fmt.Fprintf(xp.writer, "<scv-results>")
 }
 
-func (xp *xmlPrinter) PrintEach(algorithmName string, v1, v2 *vector.Vector, result *result, first bool) {
+func (xp *xmlPrinter) PrintEach(r *result, first bool) {
 	fmt.Fprint(xp.writer, "<scv-result>")
-	fmt.Fprintf(xp.writer, `<algorithm>%s</algorithm><vectors><vector1>%s</vector1><vector2>%s</vector2></vectors><result>%s</result>`, algorithmName, v1.Value(), v2.Value(), result)
+	fmt.Fprintf(xp.writer, `<algorithm>%s</algorithm><vectors><vector1>%s</vector1><vector2>%s</vector2></vectors><result>%f</result>`, r.algorithm, r.pair.Vector1.Value(), r.pair.Vector2.Value(), r.similarity)
 	fmt.Fprint(xp.writer, "</scv-result>")
 }
 func (xp *xmlPrinter) PrintFooter() {
@@ -49,11 +47,11 @@ func (jp *jsonPrinter) PrintHeader() {
 	fmt.Fprintf(jp.writer, "[")
 }
 
-func (jp *jsonPrinter) PrintEach(algorithmName string, v1, v2 *vector.Vector, result *result, first bool) {
+func (jp *jsonPrinter) PrintEach(r *result, first bool) {
 	if !first {
 		fmt.Fprintf(jp.writer, ",")
 	}
-	fmt.Fprintf(jp.writer, `{"algorithm:":"%s","vector1":"%s","vector2":"%s","result":"%s"}`, algorithmName, v1.Value(), v2.Value(), result)
+	fmt.Fprintf(jp.writer, `{"algorithm:":"%s","vector1":"%s","vector2":"%s","result":%f}`, r.algorithm, r.pair.Vector1.Value(), r.pair.Vector2.Value(), r.similarity)
 }
 func (jp *jsonPrinter) PrintFooter() {
 	fmt.Fprintf(jp.writer, "]")
@@ -66,8 +64,8 @@ type defaultPrinter struct {
 func (dp *defaultPrinter) PrintHeader() {
 }
 
-func (dp *defaultPrinter) PrintEach(algorithmName string, v1, v2 *vector.Vector, result *result, first bool) {
-	fmt.Fprintf(dp.writer, "%s(%s, %s): %s\n", algorithmName, v1.Value(), v2.Value(), result)
+func (dp *defaultPrinter) PrintEach(r *result, first bool) {
+	fmt.Fprintf(dp.writer, "%s(%s, %s): %f\n", r.algorithm, r.pair.Vector1.Value(), r.pair.Vector2.Value(), r.similarity)
 }
 
 func (dp *defaultPrinter) PrintFooter() {

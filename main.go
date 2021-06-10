@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"strconv"
 	"strings"
 
 	"github.com/tamada/scv/vector"
@@ -52,29 +51,27 @@ func pairing(vectors []*vector.Vector) []*vector.VectorPair {
 }
 
 type result struct {
+	algorithm  string
+	pair       *vector.VectorPair
 	similarity float64
-	err        error
 }
 
-func (r *result) String() string {
-	if r.err != nil {
-		return r.err.Error()
-	}
-	return strconv.FormatFloat(r.similarity, 'f', 2, 64)
-}
-
-func calculate(pairs []*vector.VectorPair, algorithm vector.Algorithm) []*result {
+func calculate(pairs []*vector.VectorPair, algorithm vector.Algorithm, name string) []*result {
 	results := []*result{}
 	for _, pair := range pairs {
 		similarity := pair.Compare(algorithm)
-		results = append(results, &result{similarity: similarity, err: nil})
+		results = append(results, &result{algorithm: name, similarity: similarity, pair: pair})
 	}
 	return results
 }
 
-func perform(opts *options) int {
+func constructPairs(opts *options) []*vector.VectorPair {
 	vectors := convert(opts)
-	pairs := pairing(vectors)
+	return pairing(vectors)
+}
+
+func perform(opts *options) int {
+	pairs := constructPairs(opts)
 	algos := strings.Split(opts.algorithm, ",")
 	printer := NewPrinter(opts.format, os.Stdout)
 	printer.PrintHeader()
@@ -84,16 +81,16 @@ func perform(opts *options) int {
 			fmt.Println(err.Error())
 			return 3
 		}
-		results := calculate(pairs, algorithm)
-		printEach(printer, algorithmName, pairs, results, i == 0)
+		results := calculate(pairs, algorithm, algorithmName)
+		printEach(printer, results, i == 0)
 	}
 	printer.PrintFooter()
 	return 0
 }
 
-func printEach(printer Printer, algorithmName string, pairs []*vector.VectorPair, results []*result, first bool) int {
-	for i, _ := range results {
-		printer.PrintEach(algorithmName, pairs[i].Vector1, pairs[i].Vector2, results[i], first && i == 0)
+func printEach(printer Printer, results []*result, first bool) int {
+	for i := range results {
+		printer.PrintEach(results[i], first && i == 0)
 	}
 	return 0
 }

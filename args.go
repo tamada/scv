@@ -26,9 +26,10 @@ func isIn(originalValue string, set []string) error {
 }
 
 func validateAlgorithm(algorithm string) error {
-	algorithms := strings.Split(algorithm, ",")
-	for _, a := range algorithms {
-		err := isIn(a, []string{"simpson", "jaccard", "dice", "cosine", "pearson", "euclidean", "manhattan", "chebyshev"})
+	values := strings.Split(algorithm, ",")
+	set := []string{"simpson", "jaccard", "dice", "cosine", "pearson", "euclidean", "manhattan", "chebyshev"}
+	for _, value := range values {
+		err := isIn(value, set)
 		if err != nil {
 			return err
 		}
@@ -75,7 +76,7 @@ func parseArgs(args []string) (*options, error) {
 	opts := &options{}
 	flags := flag.NewFlagSet("scv", flag.ContinueOnError)
 	flags.Usage = func() { fmt.Println(helpMessage(args[0])) }
-	flags.StringVarP(&opts.algorithm, "algorithm", "a", "default", "specifies the calculating algorithm.")
+	flags.StringVarP(&opts.algorithm, "algorithm", "a", "unknown", "specifies the calculating algorithm.")
 	flags.StringVarP(&opts.format, "format", "f", "default", "specifies the output format.")
 	flags.StringVarP(&opts.inputType, "input-type", "t", "string", "specifies the type of VECTORS.")
 	flags.BoolVarP(&opts.helpFlag, "help", "h", false, "prints this message")
