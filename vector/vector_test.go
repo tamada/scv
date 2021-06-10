@@ -78,3 +78,10 @@ func TestPearsonCorrelation(t *testing.T) {
 		{"android", "ipodtouch", -0.178885438},
 	}, "pearson")
 }
+
+func TestEuclideanDistance(t *testing.T) {
+	execTest(t, []TestData{
+		{"distance", "similarity", 3.464101615},
+		{"android", "ipodtouch", 3.16227766},
+	}, "euclidean")
+}
