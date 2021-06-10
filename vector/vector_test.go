@@ -85,3 +85,10 @@ func TestEuclideanDistance(t *testing.T) {
 		{"android", "ipodtouch", 3.16227766},
 	}, "euclidean")
 }
+
+func TestManhattanDistance(t *testing.T) {
+	execTest(t, []TestData{
+		{"distance", "similarity", 10.0},
+		{"android", "ipodtouch", 10.0},
+	}, "manhattan")
+}
