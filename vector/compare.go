@@ -2,7 +2,6 @@ package vector
 
 import (
 	"fmt"
-	"math"
 	"strings"
 )
 
@@ -29,7 +28,9 @@ type jaccardComparator struct {
 
 func (jc *jaccardComparator) Compare(v1, v2 *Vector) float64 {
 	vp := NewVectorPair(v1, v2)
-	return vp.Union().Length() / math.Min(v1.Length(), v2.Length())
+	intersect := vp.Intersect()
+	union := vp.Union()
+	return intersect.Length() / union.Length()
 }
 
 type cosineComparator struct {

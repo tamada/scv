@@ -41,11 +41,11 @@ func (vp *VectorPair) Length() float64 {
 	return float64(len(vp.values))
 }
 
-func (vp *VectorPair) Intersect() *Vector {
+func (vp *VectorPair) Union() *Vector {
 	return &Vector{Source: vp, values: vp.values}
 }
 
-func (vp *VectorPair) Union() *Vector {
+func (vp *VectorPair) Intersect() *Vector {
 	result := map[string]int{}
 	for key, value := range vp.Vector1.values {
 		v, ok := vp.Vector2.values[key]
