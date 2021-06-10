@@ -108,16 +108,16 @@ func (ld *levenshteinDistance) compareImpl(s1, s2 string) (float64, error) {
 func calcLevenshtein(table [][]int, s1, s2 string) {
 	for i := 1; i < len(table); i++ {
 		for j := 1; j < len(table[i]); j++ {
-			updateTable(table, i, j, s1[i-1] == s2[j-1])
+			cost := 1
+			if s1[i-1] == s2[j-1] {
+				cost = 0
+			}
+			updateTable(table, i, j, cost)
 		}
 	}
 }
 
-func updateTable(table [][]int, i, j int, equalsFlag bool) {
-	cost := 1
-	if equalsFlag {
-		cost = 0
-	}
+func updateTable(table [][]int, i, j, cost int) {
 	d1 := table[i-1][j] + 1
 	d2 := table[i][j-1] + 1
 	d3 := table[i-1][j-1] + cost
