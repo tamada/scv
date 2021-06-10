@@ -110,6 +110,9 @@ func (vector *Vector) average(n float64) float64 {
 
 func (vector *Vector) Value() string {
 	s := vector.Source
+	if s.Type() == "string" {
+		return s.Value()
+	}
 	return fmt.Sprintf("%s (%v)", s.Type(), s.Value())
 }
 

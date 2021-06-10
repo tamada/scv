@@ -26,7 +26,14 @@ func isIn(originalValue string, set []string) error {
 }
 
 func validateAlgorithm(algorithm string) error {
-	return isIn(algorithm, []string{"simpson", "jaccard", "dice", "cosine"})
+	algorithms := strings.Split(algorithm, ",")
+	for _, a := range algorithms {
+		err := isIn(a, []string{"simpson", "jaccard", "dice", "cosine", "pearson", "euclidean", "manhattan", "chebyshev"})
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 func validateInputType(inputType string) error {
