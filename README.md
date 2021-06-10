@@ -21,7 +21,7 @@ scv [OPTIONS] <VECTORS...>
 OPTIONS
     -a, --algorithm <ALGORITHM>    specifies the calculating algorithm.  This option is mandatory.
                                    The value of this option accepts several values separated with comma.
-                                   Available values are: simpson, jaccard, dice, and cosine.
+                                   Available values are: simpson, jaccard, dice, cosine, pearson.
     -f, --format <FORMAT>          specifies the resultant format. Default is default.
                                    Available values are: default, json, and xml.
     -t, --input-type <TYPE>        specifies the type of VECTORS. Default is file.
