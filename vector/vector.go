@@ -1,8 +1,11 @@
 package vector
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"math"
+	"os"
 )
 
 type VectorPair struct {
@@ -121,9 +124,34 @@ func newVector(source Source) *Vector {
 }
 
 func NewVectorFromString(baseString string) *Vector {
-	vector := newVector(newStringSource(baseString))
+	vector := newVector(NewSource("string", baseString))
 	for _, c := range baseString {
 		vector.Put(string(c))
 	}
 	return vector
+}
+
+func NewVectorFromJsonFile(baseString string) (*Vector, error) {
+	file, err := os.Open(baseString)
+	if err != nil {
+		return nil, fmt.Errorf("open: %w", err)
+	}
+	defer file.Close()
+	raw, err := ioutil.ReadAll(file)
+	if err != nil {
+		return nil, fmt.Errorf("readall: %w", err)
+	}
+	readData := map[string]interface{}{}
+	if err := json.Unmarshal(raw, &readData); err != nil {
+		return nil, fmt.Errorf("unmarshal: %w", err)
+	}
+	result := map[string]int{}
+	for key := range readData {
+		result[key] = int(readData[key].(float64))
+	}
+	return &Vector{Source: NewSource("json", baseString), values: result}, nil
+}
+
+func NewVectorFromFile(baseString string) (*Vector, error) {
+	return nil, fmt.Errorf("not implemented yet")
 }

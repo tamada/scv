@@ -66,13 +66,20 @@ func calculate(pairs []*vector.VectorPair, algorithm vector.Algorithm, name stri
 	return results
 }
 
-func constructPairs(opts *options) []*vector.VectorPair {
-	vectors := convert(opts)
-	return pairing(vectors)
+func constructPairs(opts *options) ([]*vector.VectorPair, error) {
+	vectors, err := constructVectors(opts)
+	if err != nil {
+		return nil, err
+	}
+	return pairing(vectors), nil
 }
 
 func perform(opts *options) int {
-	pairs := constructPairs(opts)
+	pairs, err := constructPairs(opts)
+	if err != nil {
+		fmt.Println(err.Error())
+		return 4
+	}
 	algos := strings.Split(opts.algorithm, ",")
 	printer := NewPrinter(opts.format, os.Stdout)
 	printer.PrintHeader()
