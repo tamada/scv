@@ -30,7 +30,7 @@ VECTORS
 
 func convert(opts *options) []*vector.Vector {
 	results := []*vector.Vector{}
-	for _, arg := range opts.args {
+	for _, arg := range opts.input.args {
 		vector := vector.NewVectorFromString(arg)
 		results = append(results, vector)
 	}
@@ -80,8 +80,8 @@ func perform(opts *options) int {
 		fmt.Println(err.Error())
 		return 4
 	}
-	algos := strings.Split(opts.algorithm, ",")
-	printer := NewPrinter(opts.format, os.Stdout)
+	algos := strings.Split(opts.runtime.algorithm, ",")
+	printer := NewPrinter(opts.output.format, os.Stdout)
 	printer.PrintHeader()
 	for i, algorithmName := range algos {
 		algorithm, err := vector.NewAlgorithm(algorithmName)
@@ -110,7 +110,7 @@ func goMain(args []string) int {
 		fmt.Println(helpMessage(args[0]))
 		return 1
 	}
-	if opts.helpFlag {
+	if opts.output.helpFlag {
 		fmt.Println(helpMessage(args[0]))
 		return 0
 	}
