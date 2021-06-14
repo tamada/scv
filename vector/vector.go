@@ -204,7 +204,8 @@ func NewTermVectorFromReader(reader io.Reader, source Source) (*Vector, error) {
 		line, err := bufReader.ReadString('\n')
 		if err == io.EOF {
 			break
-		} else if err != nil {
+		}
+		if err != nil {
 			return nil, err
 		}
 		putTerms(line, values)
@@ -215,10 +216,7 @@ func NewTermVectorFromReader(reader io.Reader, source Source) (*Vector, error) {
 func putData(values map[string]int, data []byte, length int) {
 	for i := 0; i < length; i++ {
 		key := string(data[i])
-		value, ok := values[key]
-		if !ok {
-			value = 0
-		}
+		value := values[key]
 		values[key] = (value + 1)
 	}
 }
@@ -226,7 +224,7 @@ func putData(values map[string]int, data []byte, length int) {
 func NewByteVectorFromReader(reader io.Reader, source Source) (*Vector, error) {
 	values := map[string]int{}
 	for {
-		data := []byte{}
+		data := make([]byte, 1024)
 		n, err := reader.Read(data)
 		if err == io.EOF {
 			break

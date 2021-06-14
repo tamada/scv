@@ -25,6 +25,39 @@ func TestConstructVector(t *testing.T) {
 	}
 }
 
+func TestVectorFromByteFile(t *testing.T) {
+	vector, _ := NewByteVectorFromFile("../testdata/humpty_dumpty.txt")
+	hd := map[string]int{" ": 22, "\n": 4, "H": 3, "u": 7, "m": 6, "t": 13, "y": 5, "D": 2, "s": 5, "a": 11, "o": 4, "n": 7, "w": 1, "l": 9, ",": 1, "h": 5, "d": 3, "g": 5, "r": 3, "e": 7, "f": 1, "A": 1, "k": 2, "'": 3, "i": 3, "C": 1}
+	for term, count := range hd {
+		gotCount := vector.values[term]
+		if gotCount != count {
+			t.Errorf("count of character \"%s\" did not match, wont %d, got %d", term, count, gotCount)
+		}
+	}
+}
+
+func TestVectorFromTermFile(t *testing.T) {
+	vector, _ := NewTermVectorFromFile("../testdata/humpty_dumpty.txt")
+	hd := map[string]int{"humpty": 3, "dumpty": 2, "sat": 1, "on": 1, "a": 2, "wall": 1, "had": 1, "great": 1, "fall": 1, "all": 2, "the": 2, "king's": 2, "horses": 1, "and": 1, "men": 1, "couldn't": 1, "put": 1, "together": 1, "again": 1}
+	for term, count := range hd {
+		gotCount := vector.values[term]
+		if gotCount != count {
+			t.Errorf("count of term \"%s\" did not match, wont %d, got %d", term, count, gotCount)
+		}
+	}
+}
+
+func TestVectorFromJsonFile(t *testing.T) {
+	vector, _ := NewVectorFromJsonFile("../testdata/phenomenon.json")
+	hd := map[string]int{"p": 1, "h": 1, "e": 2, "n": 3, "o": 2, "m": 1}
+	for term, count := range hd {
+		gotCount := vector.values[term]
+		if gotCount != count {
+			t.Errorf("count of item \"%s\" did not match, wont %d, got %d", term, count, gotCount)
+		}
+	}
+}
+
 type TestData struct {
 	giveString1    string
 	giveString2    string
