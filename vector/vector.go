@@ -1,8 +1,14 @@
 package vector
 
 import (
+	"bufio"
+	"encoding/json"
 	"fmt"
+	"io"
+	"io/ioutil"
 	"math"
+	"os"
+	"strings"
 )
 
 type VectorPair struct {
@@ -121,9 +127,114 @@ func newVector(source Source) *Vector {
 }
 
 func NewVectorFromString(baseString string) *Vector {
-	vector := newVector(newStringSource(baseString))
+	vector := newVector(NewSource("string", baseString))
 	for _, c := range baseString {
 		vector.Put(string(c))
 	}
 	return vector
+}
+
+func NewVectorFromJsonFile(baseString string) (*Vector, error) {
+	file, err := os.Open(baseString)
+	if err != nil {
+		return nil, fmt.Errorf("open: %w", err)
+	}
+	defer file.Close()
+	raw, err := ioutil.ReadAll(file)
+	if err != nil {
+		return nil, fmt.Errorf("readall: %w", err)
+	}
+	return newVectorFromJsonData(raw, baseString)
+}
+
+func newVectorFromJsonData(raw []byte, baseString string) (*Vector, error) {
+	readData := map[string]interface{}{}
+	if err := json.Unmarshal(raw, &readData); err != nil {
+		return nil, fmt.Errorf("unmarshal: %w", err)
+	}
+	result := map[string]int{}
+	for key := range readData {
+		result[key] = int(readData[key].(float64))
+	}
+	return &Vector{Source: NewSource("json", baseString), values: result}, nil
+}
+
+func NewTermVectorFromFile(baseString string) (*Vector, error) {
+	file, err := os.Open(baseString)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+	return NewTermVectorFromReader(file, NewSource("term_file", baseString))
+}
+
+func NewByteVectorFromFile(baseString string) (*Vector, error) {
+	reader, err := os.Open(baseString)
+	if err != nil {
+		return nil, err
+	}
+	defer reader.Close()
+	return NewByteVectorFromReader(reader, NewSource("byte_file", baseString))
+}
+
+func removeSpecialCharacters(line string) string {
+	specialCharacters := []string{".", ",", ":", ";", "!", "[", "]", "(", ")", "<", ">", "@", "/", "{", "}", "?"}
+	for _, sc := range specialCharacters {
+		line = strings.ReplaceAll(line, sc, " ")
+	}
+	return line
+}
+
+func putTerms(line string, values map[string]int) {
+	line = removeSpecialCharacters(line)
+	terms := strings.Split(line, " ")
+	for _, term := range terms {
+		t := strings.ToLower(strings.TrimSpace(term))
+		if t != "" {
+			value := values[t]
+			values[t] = value + 1
+		}
+	}
+}
+
+func NewTermVectorFromReader(reader io.Reader, source Source) (*Vector, error) {
+	bufReader := bufio.NewReader(reader)
+	values := map[string]int{}
+	for {
+		line, err := bufReader.ReadString('\n')
+		if err == io.EOF {
+			break
+		} else if err != nil {
+			return nil, err
+		}
+		putTerms(line, values)
+	}
+	return &Vector{Source: source, values: values}, nil
+}
+
+func putData(values map[string]int, data []byte, length int) {
+	for i := 0; i < length; i++ {
+		key := string(data[i])
+		value, ok := values[key]
+		if !ok {
+			value = 0
+		}
+		values[key] = (value + 1)
+	}
+}
+
+func NewByteVectorFromReader(reader io.Reader, source Source) (*Vector, error) {
+	values := map[string]int{}
+	for {
+		data := []byte{}
+		n, err := reader.Read(data)
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return nil, err
+		}
+		putData(values, data, n)
+	}
+	return &Vector{Source: source, values: values}, nil
 }

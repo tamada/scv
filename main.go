@@ -30,7 +30,7 @@ VECTORS
 
 func convert(opts *options) []*vector.Vector {
 	results := []*vector.Vector{}
-	for _, arg := range opts.args {
+	for _, arg := range opts.input.args {
 		vector := vector.NewVectorFromString(arg)
 		results = append(results, vector)
 	}
@@ -66,15 +66,22 @@ func calculate(pairs []*vector.VectorPair, algorithm vector.Algorithm, name stri
 	return results
 }
 
-func constructPairs(opts *options) []*vector.VectorPair {
-	vectors := convert(opts)
-	return pairing(vectors)
+func constructPairs(opts *options) ([]*vector.VectorPair, error) {
+	vectors, err := constructVectors(opts)
+	if err != nil {
+		return nil, err
+	}
+	return pairing(vectors), nil
 }
 
 func perform(opts *options) int {
-	pairs := constructPairs(opts)
-	algos := strings.Split(opts.algorithm, ",")
-	printer := NewPrinter(opts.format, os.Stdout)
+	pairs, err := constructPairs(opts)
+	if err != nil {
+		fmt.Println(err.Error())
+		return 4
+	}
+	algos := strings.Split(opts.runtime.algorithm, ",")
+	printer := NewPrinter(opts.output.format, os.Stdout)
 	printer.PrintHeader()
 	for i, algorithmName := range algos {
 		algorithm, err := vector.NewAlgorithm(algorithmName)
@@ -103,7 +110,7 @@ func goMain(args []string) int {
 		fmt.Println(helpMessage(args[0]))
 		return 1
 	}
-	if opts.helpFlag {
+	if opts.output.helpFlag {
 		fmt.Println(helpMessage(args[0]))
 		return 0
 	}

@@ -7,12 +7,25 @@ import (
 	flag "github.com/spf13/pflag"
 )
 
-type options struct {
+type runtimeOpts struct {
 	algorithm string
-	format    string
+	verbose   bool
+}
+
+type outputOpts struct {
+	format   string
+	helpFlag bool
+}
+
+type inputOpts struct {
 	inputType string
-	helpFlag  bool
 	args      []string
+}
+
+type options struct {
+	runtime *runtimeOpts
+	output  *outputOpts
+	input   *inputOpts
 }
 
 func isIn(originalValue string, set []string) error {
@@ -42,7 +55,7 @@ func validateAlgorithm(algorithms string) error {
 }
 
 func validateInputType(inputTypes string) error {
-	return validateMultipleValues(inputTypes, []string{"string", "file", "json"})
+	return validateMultipleValues(inputTypes, []string{"string", "byte_file", "term_file", "json"})
 }
 
 func validateFormat(format string) error {
@@ -54,9 +67,9 @@ func validateEachOpt(opts *options) error {
 		value     string
 		validator func(value string) error
 	}{
-		{opts.inputType, validateInputType},
-		{opts.format, validateFormat},
-		{opts.algorithm, validateAlgorithm},
+		{opts.input.inputType, validateInputType},
+		{opts.output.format, validateFormat},
+		{opts.runtime.algorithm, validateAlgorithm},
 	}
 	for _, datum := range data {
 		if err := datum.validator(datum.value); err != nil {
@@ -67,33 +80,34 @@ func validateEachOpt(opts *options) error {
 }
 
 func validate(opts *options) (*options, error) {
-	if opts.helpFlag {
+	if opts.output.helpFlag {
 		return opts, nil
 	}
-	if len(opts.args) <= 1 {
+	if len(opts.input.args) <= 1 {
 		return nil, fmt.Errorf("two arguments are required at the least")
 	}
 	if err := validateEachOpt(opts); err != nil {
 		return nil, err
 	}
-	types := strings.Split(opts.inputType, ",")
-	if len(types) != 1 && (len(types) != len(opts.args)) {
-		return nil, fmt.Errorf("%s: input type must be one or same length with args (%d != %d)", opts.inputType, len(types), len(opts.args))
+	types := strings.Split(opts.input.inputType, ",")
+	if len(types) != 1 && (len(types) != len(opts.input.args)) {
+		return nil, fmt.Errorf("%s: input type must be one or same length with args (%d != %d)", opts.input.inputType, len(types), len(opts.input.args))
 	}
 	return opts, nil
 }
 
 func parseArgs(args []string) (*options, error) {
-	opts := &options{}
+	opts := &options{runtime: &runtimeOpts{}, input: &inputOpts{}, output: &outputOpts{}}
 	flags := flag.NewFlagSet("scv", flag.ContinueOnError)
 	flags.Usage = func() { fmt.Println(helpMessage(args[0])) }
-	flags.StringVarP(&opts.algorithm, "algorithm", "a", "unknown", "specifies the calculating algorithm.")
-	flags.StringVarP(&opts.format, "format", "f", "default", "specifies the output format.")
-	flags.StringVarP(&opts.inputType, "input-type", "t", "string", "specifies the type of VECTORS.")
-	flags.BoolVarP(&opts.helpFlag, "help", "h", false, "prints this message")
+	flags.StringVarP(&opts.runtime.algorithm, "algorithm", "a", "unknown", "specifies the calculating algorithm.")
+	flags.BoolVarP(&opts.runtime.verbose, "verbose", "V", false, "runs on verbose mode.")
+	flags.StringVarP(&opts.output.format, "format", "f", "default", "specifies the output format.")
+	flags.StringVarP(&opts.input.inputType, "input-type", "t", "string", "specifies the type of VECTORS.")
+	flags.BoolVarP(&opts.output.helpFlag, "help", "h", false, "prints this message")
 	if err := flags.Parse(args); err != nil {
 		return nil, err
 	}
-	opts.args = flags.Args()[1:]
+	opts.input.args = flags.Args()[1:]
 	return validate(opts)
 }
