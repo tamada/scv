@@ -144,6 +144,10 @@ func NewVectorFromJsonFile(baseString string) (*Vector, error) {
 	if err != nil {
 		return nil, fmt.Errorf("readall: %w", err)
 	}
+	return newVectorFromJsonData(raw, baseString)
+}
+
+func newVectorFromJsonData(raw []byte, baseString string) (*Vector, error) {
 	readData := map[string]interface{}{}
 	if err := json.Unmarshal(raw, &readData); err != nil {
 		return nil, fmt.Errorf("unmarshal: %w", err)
