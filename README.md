@@ -4,7 +4,12 @@
 [![Coverage Status](https://coveralls.io/repos/github/tamada/scv/badge.svg?branch=setup_ci)](https://coveralls.io/github/tamada/scv?branch=setup_ci)
 [![Go Report Card](https://goreportcard.com/badge/github.com/tamada/scv)](https://goreportcard.com/report/github.com/tamada/scv)
 [![codebeat badge](https://codebeat.co/badges/5221e6ba-da64-45c1-8b13-f833f678e3b9)](https://codebeat.co/projects/github-com-tamada-scv-main)
+
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?logo=spdx)](https://github.com/tamada/scv/blob/main/LICENSE)
+[![Version](https://img.shields.io/badge/Version-1.0.0-blue.svg)](https://github.com/tamada/scv/releases/tag/v1.0.0)
+
+[![Docker](https://img.shields.io/badge/Docker-ghcr.io%2Ftamada%2Fscvt%3A1.0.0-green?logo=docker)](https://github.com/users/tamada/packages/container/package/scv)
+
 
 Similarities and distance Calculator among Vectors.
 
@@ -15,6 +20,8 @@ There are several algorithms to calculate the similarities of two bectors; howev
 
 
 ## :runner: Usage
+
+### :question: CLI help message
 
 ```sh
 scv [OPTIONS] <VECTORS...>
@@ -43,6 +50,26 @@ $ scv -t string -a jaccard,dice distance similarity
 jaccard(distance, similarity) = 0.3333
 dice(distance, similarity) = 0.5000
 ```
+
+### :whale: Docker
+
+[![Docker](https://img.shields.io/badge/Docker-ghcr.io%2Ftamada%2Fscvt%3A1.0.0-green?logo=docker)](https://github.com/users/tamada/packages/container/package/scv)
+
+```sh
+docker run -it ghcr.io/tamada/scv:latest gives some strings for comparing
+```
+
+If `scv` reads some files, `-v` option should be specified.
+
+```sh
+docker run -v $PWD:/home/scv -it ghcr.io/tamada/scv:latest -f json testdata/*.json
+```
+
+#### versions
+
+- `1.0.0`, `latest`
+
+## :anchor: Install
 
 ## :smile: About
 
