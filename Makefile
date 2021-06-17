@@ -11,11 +11,12 @@ setup:
 test: setup
 	$(GO) test -covermode=count -coverprofile=coverage.out $$(go list ./...)
 
-define __create_dist()
+define __create_dist
 	mkdir -p dist/$(1)_$(2)/$(DIST)
 	GOOS=$1 GOARCH=$2 go build -o dist/$(1)_$(2)/$(DIST)/$(NAME)$(3) main.go args.go printer.go input.go
-	cp -r README.md LICENSE dist/$(1)_$(2)/$(DIST)
-	tar cvfz dist/$(DIST)_$(1)_$(2).tar.gz -C dist/$(1)_$(2) $(DIST)
+	cp -r README.md LICENSE completions dist/$(1)_$(2)/$(DIST)
+	tar cfz dist/$(DIST)_$(1)_$(2).tar.gz -C dist/$(1)_$(2) $(DIST)
+	echo "Done $(1)_$(2)"
 endef
 
 dist: all
@@ -28,4 +29,4 @@ build: main.go args.go printer.go input.go vector
 	go build -o $(NAME) -v main.go args.go printer.go input.go
 
 clean:
-	@rm -f nml *~
+	@rm -f scv *~
