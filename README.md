@@ -56,4 +56,6 @@ dice(distance, similarity) = 0.5000
 
 ### :jack_o_lantern: Icon
 
-![Icon](https://github.com/tamada/scv/blob/main/docs/static/images/scv.png)
+![Icon](https://github.com/tamada/scv/blob/main/docs/static/images/scale.png)
+
+This image is obtained from [iconscount.com](https://iconscout.com/icon/scale-217).
