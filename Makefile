@@ -17,7 +17,8 @@ define __create_dist
 	GOOS=$1 GOARCH=$2 go build -o dist/$(1)_$(2)/$(DIST)/$(NAME)$(3) main.go args.go printer.go input.go
 	cp -r README.md LICENSE completions dist/$(1)_$(2)/$(DIST)
 	cp -r docs/public                   dist/$(1)_$(2)/$(DIST)/docs
-	tar cvfz dist/$(DIST)_$(1)_$(2).tar.gz -C dist/$(1)_$(2) $(DIST)
+	tar cfz dist/$(DIST)_$(1)_$(2).tar.gz -C dist/$(1)_$(2) $(DIST)
+	echo "Done $(1)_$(2)"
 endef
 
 dist: all

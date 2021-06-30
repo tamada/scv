@@ -20,6 +20,8 @@ There are several algorithms to calculate the similarities of two bectors; howev
 
 ## :runner: Usage
 
+### :question: CLI help message
+
 ```sh
 scv [OPTIONS] <VECTORS...>
 OPTIONS
@@ -47,6 +49,24 @@ $ scv -t string -a jaccard,dice distance similarity
 jaccard(distance, similarity) = 0.3333
 dice(distance, similarity) = 0.5000
 ```
+
+### :whale: Docker
+
+[![Docker](https://img.shields.io/badge/Docker-ghcr.io%2Ftamada%2Fscv%3A1.0.0-green?logo=docker)](https://github.com/users/tamada/packages/container/package/scv)
+
+```sh
+docker run -it ghcr.io/tamada/scv:latest gives some strings for comparing
+```
+
+If `scv` reads some files, `-v` option should be specified.
+
+```sh
+docker run -v $PWD:/home/scv -it ghcr.io/tamada/scv:latest -f json testdata/*.json
+```
+
+#### versions
+
+- `1.0.0`, `latest`
 
 ## :anchor: Install
 
