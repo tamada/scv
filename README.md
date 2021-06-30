@@ -32,7 +32,7 @@ OPTIONS
     -t, --input-type <TYPE>        specifies the type of VECTORS. Default is file.
                                    If TYPE is separated with comma, each type shows
                                    the corresponding VECTORS.
-                                   Available values are: file, string, and json.
+                                   Available values are: byte_file, term_file, string, and json.
     -h, --help                     prints this message.
 VECTORS
     the source of vectors for calculation.
@@ -46,6 +46,31 @@ simpson(distance, similarity) = 0.5000
 $ scv -t string -a jaccard,dice distance similarity
 jaccard(distance, similarity) = 0.3333
 dice(distance, similarity) = 0.5000
+```
+
+## :anchor: Install
+
+### :beer: Homebrew
+
+Simply type the following commands.
+
+```
+brew tap tamada/brew
+brew install scv
+```
+
+### Go lang
+
+```
+go get github.com/tamada/scv
+```
+
+### :muscle: Compile yourself
+
+```
+git clone https://github.com/tamada/scv
+cd scv
+make
 ```
 
 ## :smile: About
