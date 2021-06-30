@@ -1,4 +1,6 @@
-# :balance_scale: scv
+---
+title: ":house: Home"
+---
 
 [![build](https://github.com/tamada/scv/actions/workflows/build.yml/badge.svg)](https://github.com/tamada/scv/actions/workflows/build.yml)
 [![Coverage Status](https://coveralls.io/repos/github/tamada/scv/badge.svg?branch=setup_ci)](https://coveralls.io/github/tamada/scv?branch=setup_ci)

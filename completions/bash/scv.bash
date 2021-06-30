@@ -11,16 +11,16 @@ __scv() {
             COMPREPLY=($(compgen -W "simpson jaccard dice cosine pearson euclidean manhattan chebyshev levenshtein" -- "${cur}"))
             return 0
             ;;
-        --format | -f)
-            COMPREPLY=($(compgen -W "default xml json" -- "${cur}"))
+        --input-type | -t)
+            COMPREPLY=($(compgen -W "byte_file term_file string json" -- "${cur}"))
             return 0
             ;;
-        --input-type | -t)
-            COMPREPLY=($(compgen -W "string json byte_file term_file" -- "${cur}"))
+        --format | -f)
+            COMPREPLY=($(compgen -W "default json xml" -- "${cur}"))
             return 0
             ;;
     esac
-    opts="-a --algorithm -f --format -t --input-type -h --help"
+    opts=" -a -f -t -h  --algorithm --format --input-type --help"
     if [[ "$cur" =~ ^\- ]]; then
         COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
         return 0

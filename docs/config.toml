@@ -1,0 +1,29 @@
+baseURL = "https://tamada.github.io/scv"
+languageCode = "en-us"
+defaultContentLanguage = "en"
+title = "SCV"
+enableEmoji = true
+theme = "cayman-hugo-theme"
+# googleAnalytics = "UA-62401730-14"
+
+pygmentsCodefences = true
+pygmentsStyle = "pygments"
+
+[params]
+    project_name = "scv"
+    project_logo = "images/scale.png"
+    project_tagline = "Similarities and distances calculator among vectors"
+    dateFormat = "2006-01-02"
+    katex = true
+
+    footer = "[![GitHub](https://img.shields.io/badge/GitHub-tamada/scv-blueviolet.svg?logo=github)](https://github.com/tamada/scv) Made with [Hugo](https://gohugo.io/). Theme by [Cayman](https://github.com/zwbetz-gh/cayman-hugo-theme). Deployed to [GitHub Pages](https://pages.github.com/)."
+
+[menu]
+    [[menu.nav]]
+        name = ":house: Home"
+        url = "/"
+        weight = 10
+    [[menu.nav]]
+        name = ":gem: Algorithms"
+        url = "/algorithms"
+        weight = 20
