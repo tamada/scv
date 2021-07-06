@@ -58,52 +58,31 @@
     
   <h1>💎 Algorithms</h1>
   <h2 id="-overview">🗣 Overview</h2>
-
 <p><code>scv</code> supports simpson, jaccard, dice, cosine, pearson, euclidean, manhattan, and chebyshev algorithms.
 Those algorithms separated into two categories, similarities, and distances.
 The followings describes each algorithms and how to calculate similarity/distance from two vectors.</p>
-
 <p>Before calculating the similarities and/or distance of the following algorithms,
-we assume that two vectors were given (<span  class="math">\(v = \{ (a_1, b_1), (a_2, b_2), ..., (a_n, b_n) \}\)</span> and <span  class="math">\(w = \{ (c_1, d_1), (c_2, d_2), ..., (c_m, d_m) \}\)</span>).</p>
-
+we assume that two vectors were given (\(v = { (a_1, b_1), (a_2, b_2), &hellip;, (a_n, b_n) }\) and \(w = { (c_1, d_1), (c_2, d_2), &hellip;, (c_m, d_m) }\)).</p>
 <h2 id="similarities">Similarities</h2>
-
 <p>Calculate similarities among the given vectors.
 For this, <code>scv</code> computes similarity between two vectors from the given vectors of their combinations.</p>
-
 <p>To describe each algorithm,
 Each element of the vector has key and value.</p>
-
 <h3 id="simpson-index">Simpson Index</h3>
-
-<p><span  class="math">\[S = \frac{|\mathrm{intersect}(v, w)|}{\min(|v_1|, |v_2|)}\]</span></p>
-
-<p><span  class="math">\(\mathrm{intersect}\)</span> function returns the new vector by common keys and sum of thier values (<span  class="math">\(a_i = c_j (1 \leq i \leq n, 1 \leq j \leq m)\)</span>.</p>
-
+<p>$$S = \frac{|\mathrm{intersect}(v, w)|}{\min(|v_1|, |v_2|)}$$</p>
+<p>\(\mathrm{intersect}\) function returns the new vector by common keys and sum of thier values (\(a_i = c_j (1 \leq i \leq n, 1 \leq j \leq m)\).</p>
 <h3 id="jaccard-index">Jaccard index</h3>
-
-<p><span  class="math">\[J=\frac{|\mathrm{intersect}(v, w)|}{|\mathrm{union}(v, w)|}\]</span></p>
-
-<p><span  class="math">\(\mathrm{intersect}\)</span> function returns the new vector which contains every keys of <span  class="math">\(v\)</span> and <span  class="math">\(w\)</span>.</p>
-
+<p>$$J=\frac{|\mathrm{intersect}(v, w)|}{|\mathrm{union}(v, w)|}$$</p>
+<p>\(\mathrm{intersect}\) function returns the new vector which contains every keys of \(v\) and \(w\).</p>
 <h3 id="dice-index">Dice index</h3>
-
-<p><span  class="math">\[D=\frac{2\times|\mathrm{intersect}(v, w)|}{|v| + |w|}\]</span></p>
-
+<p>$$D=\frac{2\times|\mathrm{intersect}(v, w)|}{|v| + |w|}$$</p>
 <h3 id="cosine-similarity">Cosine similarity</h3>
-
-<p><span  class="math">\[C=\cos\theta=\frac{v\cdot w}{\sqrt{\sum_{i=0}^{n}b_i^2}\sqrt{\sum_{j=0}^{m}d_j^2}}\]</span></p>
-
+<p>$$C=\cos\theta=\frac{v\cdot w}{\sqrt{\sum_{i=0}^{n}b_i^2}\sqrt{\sum_{j=0}^{m}d_j^2}}$$</p>
 <h3 id="pearson-correlation-efficiency">Pearson correlation efficiency</h3>
-
 <h2 id="distances">Distances</h2>
-
 <h3 id="euclidean-distance">Euclidean Distance</h3>
-
 <h3 id="manhattan-distance">Manhattan Distance</h3>
-
 <h3 id="chebyshev-distance">Chebyshev Distance</h3>
-
 <h3 id="edit-distance">Edit Distance</h3>
 
 
