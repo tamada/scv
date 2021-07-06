@@ -9,7 +9,7 @@ Those algorithms separated into two categories, similarities, and distances.
 The followings describes each algorithms and how to calculate similarity/distance from two vectors.
 
 Before calculating the similarities and/or distance of the following algorithms,
-we assume that two vectors were given ($$v = \{ (a_1, b_1), (a_2, b_2), ..., (a_n, b_n) \}$$ and $$w = \{ (c_1, d_1), (c_2, d_2), ..., (c_m, d_m) \}$$).
+we assume that two vectors were given (\\(v = \{ (a_1, b_1), (a_2, b_2), ..., (a_n, b_n) \}\\) and \\(w = \{ (c_1, d_1), (c_2, d_2), ..., (c_m, d_m) \}\\)).
 
 ## Similarities
 
@@ -23,14 +23,14 @@ Each element of the vector has key and value.
 
 $$S = \frac{|\mathrm{intersect}(v, w)|}{\min(|v_1|, |v_2|)}$$
 
-$$\mathrm{intersect}$$ function returns the new vector by common keys and sum of thier values ($$a_i = c_j (1 \leq i \leq n, 1 \leq j \leq m)$$.
+\\(\mathrm{intersect}\\) function returns the new vector by common keys and sum of thier values (\\(a_i = c_j (1 \leq i \leq n, 1 \leq j \leq m)\\).
 
 
 ### Jaccard index
 
 $$J=\frac{|\mathrm{intersect}(v, w)|}{|\mathrm{union}(v, w)|}$$
 
-$$\mathrm{intersect}$$ function returns the new vector which contains every keys of $$v$$ and $$w$$.
+\\(\mathrm{intersect}\\) function returns the new vector which contains every keys of \\(v\\) and \\(w\\).
 
 ### Dice index
 
