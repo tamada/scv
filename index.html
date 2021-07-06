@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="generator" content="Hugo 0.83.1" />
+  <link rel="stylesheet" href="/scv/css/normalize.css">
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  
+  
+  
+  <link rel="stylesheet" href="/scv/css/cayman.ea0e967413f3851071cc8ace3621bc4205fe8fa79b2abe3d7bf94ff2841f0d47.css">
+  <link rel="stylesheet" href="/scv/style.css">
+  
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/harry.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/harry.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/harry.png">
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js" integrity="sha384-9Nhn55MVVN0/4OFx7EE5kpFBPsEMZxKTCnA+4fqDmg12eCTqGi6+BB2LjY8brQxJ" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+  <title>🏠 Home | SCV</title>
+</head>
+
+<body>
+  <section class="page-header">
+  
+    <img src="/scv/images/scale.png" class="avatar" alt="project_logo">
+  
+  <h1 class="project-name">
+    scv
+  </h1>
+  <h2 class="project-tagline">
+    Similarities and distances calculator among vectors
+  </h2>
+  <nav>
+    
+    
+      
+      
+      
+      
+      <a href="/scv/" class="btn">🏠 Home</a>
+    
+      
+      
+      
+      
+      <a href="/scv/algorithms" class="btn">💎 Algorithms</a>
+    
+  </nav>
+</section>
+
+  <section class="main-content">
+    
+<h1>🏠 Home</h1>
+
+<p><a href="https://github.com/tamada/scv/actions/workflows/build.yml"><img src="https://github.com/tamada/scv/actions/workflows/build.yml/badge.svg" alt="build"></a>
+<a href="https://coveralls.io/github/tamada/scv?branch=setup_ci"><img src="https://coveralls.io/repos/github/tamada/scv/badge.svg?branch=setup_ci" alt="Coverage Status"></a>
+<a href="https://goreportcard.com/report/github.com/tamada/scv"><img src="https://goreportcard.com/badge/github.com/tamada/scv" alt="Go Report Card"></a>
+<a href="https://codebeat.co/projects/github-com-tamada-scv-main"><img src="https://codebeat.co/badges/5221e6ba-da64-45c1-8b13-f833f678e3b9" alt="codebeat badge"></a></p>
+<p><a href="https://github.com/tamada/scv/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg?logo=spdx" alt="License"></a>
+<a href="https://github.com/tamada/scv/releases/tag/v1.0.0"><img src="https://img.shields.io/badge/Version-1.0.0-blue.svg" alt="Version"></a></p>
+<p><a href="https://github.com/users/tamada/packages/container/package/scv"><img src="https://img.shields.io/badge/Docker-ghcr.io%2Ftamada%2Fscv%3A1.0.0-green?logo=docker" alt="Docker"></a></p>
+<p>Similarities and distance Calculator among Vectors.</p>
+<h2 id="-description">🗣 Description</h2>
+<p>There are several algorithms to calculate the similarities of two bectors; however, no commands are exists treats them.
+<code>scv</code> standardizes the interface for calculating the similarities and distances among vectors.</p>
+<h2 id="-usage">🏃‍♂️ Usage</h2>
+<h3 id="-cli-help-message">❓ CLI help message</h3>
+<div class="highlight"><pre style=";-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">scv <span style="color:#666">[</span>OPTIONS<span style="color:#666">]</span> &lt;VECTORS...&gt;
+OPTIONS
+    -a, --algorithm &lt;ALGORITHM&gt;    specifies the calculating algorithm.  This option is mandatory.
+                                   The value of this option accepts several values separated with comma.
+                                   Available values are: simpson, jaccard, dice, cosine, pearson,
+                                   euclidean, manhattan, chebyshev, and levenshtein.
+    -f, --format &lt;FORMAT&gt;          specifies the resultant format. Default is default.
+                                   Available values are: default, json, and xml.
+    -t, --input-type &lt;TYPE&gt;        specifies the <span style="color:#008000">type</span> of VECTORS. Default is file.
+                                   If TYPE is separated with comma, each <span style="color:#008000">type</span> shows
+                                   the corresponding VECTORS.
+                                   Available values are: byte_file, term_file, string, and json.
+    -h, --help                     prints this message.
+VECTORS
+    the <span style="color:#008000">source</span> of vectors <span style="color:#008000;font-weight:bold">for</span> calculation.
+</code></pre></div><h2 id="-examples">👟 Examples</h2>
+<div class="highlight"><pre style=";-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ scv -t string -a simpson distance similarity
+simpson<span style="color:#666">(</span>distance, similarity<span style="color:#666">)</span> <span style="color:#666">=</span> 0.5000
+$ scv -t string -a jaccard,dice distance similarity
+jaccard<span style="color:#666">(</span>distance, similarity<span style="color:#666">)</span> <span style="color:#666">=</span> 0.3333
+dice<span style="color:#666">(</span>distance, similarity<span style="color:#666">)</span> <span style="color:#666">=</span> 0.5000
+</code></pre></div><h3 id="-docker">🐳 Docker</h3>
+<p><a href="https://github.com/users/tamada/packages/container/package/scv"><img src="https://img.shields.io/badge/Docker-ghcr.io%2Ftamada%2Fscvt%3A1.0.0-green?logo=docker" alt="Docker"></a></p>
+<div class="highlight"><pre style=";-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">docker run -it ghcr.io/tamada/scv:latest gives some strings <span style="color:#008000;font-weight:bold">for</span> comparing
+</code></pre></div><p>If <code>scv</code> reads some files, <code>-v</code> option should be specified.</p>
+<div class="highlight"><pre style=";-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">docker run -v <span style="color:#19177c">$PWD</span>:/home/scv -it ghcr.io/tamada/scv:latest -f json testdata/*.json
+</code></pre></div><h4 id="versions">versions</h4>
+<ul>
+<li><code>1.0.0</code>, <code>latest</code></li>
+</ul>
+<h2 id="-install">⚓ Install</h2>
+<h3 id="-homebrew">🍺 Homebrew</h3>
+<p>Simply type the following commands.</p>
+<pre><code>brew tap tamada/brew
+brew install scv
+</code></pre><h3 id="go-lang">Go lang</h3>
+<pre><code>go get github.com/tamada/scv
+</code></pre><h3 id="-compile-yourself">💪 Compile yourself</h3>
+<pre><code>git clone https://github.com/tamada/scv
+cd scv
+make
+</code></pre><h2 id="-about">😄 About</h2>
+<h3 id="-authors-">👨‍💼 Authors 👩‍💼</h3>
+<ul>
+<li>Haruaki Tamada (<a href="https://github.com/tamada">tamada</a>)</li>
+</ul>
+<h3 id="-license">📜 License</h3>
+<p><a href="https://github.com/tamada/scv/blob/main/LICENSE">Apache 2.0</a></p>
+<h3 id="-icon">🎃 Icon</h3>
+<p><img src="https://raw.githubusercontent.com/tamada/scv/main/docs/static/images/scale.png" alt="Icon"></p>
+<p>This image is obtained from <a href="https://iconscout.com/icon/scale-217">iconscount.com</a>.</p>
+
+
+<ul>
+
+
+</ul>
+
+    <footer class="site-footer">
+  <span class="site-footer-credits">
+    <a href="https://github.com/tamada/scv"><img src="https://img.shields.io/badge/GitHub-tamada/scv-blueviolet.svg?logo=github" alt="GitHub"></a> Made with <a href="https://gohugo.io/">Hugo</a>. Theme by <a href="https://github.com/zwbetz-gh/cayman-hugo-theme">Cayman</a>. Deployed to <a href="https://pages.github.com/">GitHub Pages</a>.
+  </span>
+</footer>
+
+  </section>
+  
+  
+
+</body>
+</html>

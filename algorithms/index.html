@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="generator" content="Hugo 0.83.1" />
+  <link rel="stylesheet" href="/scv/css/normalize.css">
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  
+  
+  
+  <link rel="stylesheet" href="/scv/css/cayman.ea0e967413f3851071cc8ace3621bc4205fe8fa79b2abe3d7bf94ff2841f0d47.css">
+  <link rel="stylesheet" href="/scv/style.css">
+  
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/harry.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/harry.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/harry.png">
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js" integrity="sha384-9Nhn55MVVN0/4OFx7EE5kpFBPsEMZxKTCnA+4fqDmg12eCTqGi6+BB2LjY8brQxJ" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+  <title>💎 Algorithms | SCV</title>
+</head>
+
+<body>
+  <section class="page-header">
+  
+    <img src="/scv/images/scale.png" class="avatar" alt="project_logo">
+  
+  <h1 class="project-name">
+    scv
+  </h1>
+  <h2 class="project-tagline">
+    Similarities and distances calculator among vectors
+  </h2>
+  <nav>
+    
+    
+      
+      
+      
+      
+      <a href="/scv/" class="btn">🏠 Home</a>
+    
+      
+      
+      
+      
+      <a href="/scv/algorithms" class="btn">💎 Algorithms</a>
+    
+  </nav>
+</section>
+
+  <section class="main-content">
+    
+  <h1>💎 Algorithms</h1>
+  <h2 id="-overview">🗣 Overview</h2>
+
+<p><code>scv</code> supports simpson, jaccard, dice, cosine, pearson, euclidean, manhattan, and chebyshev algorithms.
+Those algorithms separated into two categories, similarities, and distances.
+The followings describes each algorithms and how to calculate similarity/distance from two vectors.</p>
+
+<p>Before calculating the similarities and/or distance of the following algorithms,
+we assume that two vectors were given (<span  class="math">\(v = \{ (a_1, b_1), (a_2, b_2), ..., (a_n, b_n) \}\)</span> and <span  class="math">\(w = \{ (c_1, d_1), (c_2, d_2), ..., (c_m, d_m) \}\)</span>).</p>
+
+<h2 id="similarities">Similarities</h2>
+
+<p>Calculate similarities among the given vectors.
+For this, <code>scv</code> computes similarity between two vectors from the given vectors of their combinations.</p>
+
+<p>To describe each algorithm,
+Each element of the vector has key and value.</p>
+
+<h3 id="simpson-index">Simpson Index</h3>
+
+<p><span  class="math">\[S = \frac{|\mathrm{intersect}(v, w)|}{\min(|v_1|, |v_2|)}\]</span></p>
+
+<p><span  class="math">\(\mathrm{intersect}\)</span> function returns the new vector by common keys and sum of thier values (<span  class="math">\(a_i = c_j (1 \leq i \leq n, 1 \leq j \leq m)\)</span>.</p>
+
+<h3 id="jaccard-index">Jaccard index</h3>
+
+<p><span  class="math">\[J=\frac{|\mathrm{intersect}(v, w)|}{|\mathrm{union}(v, w)|}\]</span></p>
+
+<p><span  class="math">\(\mathrm{intersect}\)</span> function returns the new vector which contains every keys of <span  class="math">\(v\)</span> and <span  class="math">\(w\)</span>.</p>
+
+<h3 id="dice-index">Dice index</h3>
+
+<p><span  class="math">\[D=\frac{2\times|\mathrm{intersect}(v, w)|}{|v| + |w|}\]</span></p>
+
+<h3 id="cosine-similarity">Cosine similarity</h3>
+
+<p><span  class="math">\[C=\cos\theta=\frac{v\cdot w}{\sqrt{\sum_{i=0}^{n}b_i^2}\sqrt{\sum_{j=0}^{m}d_j^2}}\]</span></p>
+
+<h3 id="pearson-correlation-efficiency">Pearson correlation efficiency</h3>
+
+<h2 id="distances">Distances</h2>
+
+<h3 id="euclidean-distance">Euclidean Distance</h3>
+
+<h3 id="manhattan-distance">Manhattan Distance</h3>
+
+<h3 id="chebyshev-distance">Chebyshev Distance</h3>
+
+<h3 id="edit-distance">Edit Distance</h3>
+
+
+    <footer class="site-footer">
+  <span class="site-footer-credits">
+    <a href="https://github.com/tamada/scv"><img src="https://img.shields.io/badge/GitHub-tamada/scv-blueviolet.svg?logo=github" alt="GitHub"></a> Made with <a href="https://gohugo.io/">Hugo</a>. Theme by <a href="https://github.com/zwbetz-gh/cayman-hugo-theme">Cayman</a>. Deployed to <a href="https://pages.github.com/">GitHub Pages</a>.
+  </span>
+</footer>
+
+  </section>
+  
+  
+
+</body>
+</html>

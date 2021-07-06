@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>:house: Home on SCV</title>
+    <link>https://tamada.github.io/scv/</link>
+    <description>Recent content in :house: Home on SCV</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language><atom:link href="https://tamada.github.io/scv/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>:gem: Algorithms</title>
+      <link>https://tamada.github.io/scv/algorithms/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://tamada.github.io/scv/algorithms/</guid>
+      <description>🗣 Overview scv supports simpson, jaccard, dice, cosine, pearson, euclidean, manhattan, and chebyshev algorithms. Those algorithms separated into two categories, similarities, and distances. The followings describes each algorithms and how to calculate similarity/distance from two vectors.
+Before calculating the similarities and/or distance of the following algorithms, we assume that two vectors were given (\(v = \{ (a_1, b_1), (a_2, b_2), ..., (a_n, b_n) \}\) and \(w = \{ (c_1, d_1), (c_2, d_2), .</description>
+    </item>
+    
+  </channel>
+</rss>
