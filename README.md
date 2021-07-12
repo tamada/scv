@@ -7,6 +7,7 @@
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?logo=spdx)](https://github.com/tamada/scv/blob/main/LICENSE)
 [![Version](https://img.shields.io/badge/Version-1.0.0-blue.svg)](https://github.com/tamada/scv/releases/tag/v1.0.0)
+[![DOI](https://zenodo.org/badge/370333808.svg)](https://zenodo.org/badge/latestdoi/370333808)
 
 [![Docker](https://img.shields.io/badge/Docker-ghcr.io%2Ftamada%2Fscv%3A1.0.0-green?logo=docker)](https://github.com/users/tamada/packages/container/package/scv)
 
